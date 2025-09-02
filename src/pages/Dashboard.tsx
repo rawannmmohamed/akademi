@@ -11,7 +11,7 @@ export default function Dashboard() {
   return (
     <Box sx={{ marginTop: 3, marginLeft: 4, marginRight: 4 }}>
       <Typography
-        variant="h4"
+        variant="h5"
         sx={{ fontWeight: "bold", color: "text.secondary", mb: 3 }}
       >
         Dashboard
@@ -66,6 +66,12 @@ export default function Dashboard() {
           </Box>
         ))}
       </Box>
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: "bold", color: "text.secondary", my: 3 }}
+      >
+        Unpaid Student tuition
+      </Typography>
       <DashboardTable />
     </Box>
   );
