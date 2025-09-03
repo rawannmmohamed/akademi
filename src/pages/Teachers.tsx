@@ -1,19 +1,17 @@
 import {
-  Autocomplete,
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
   IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import type { Teacher } from "../models";
 import React from "react";
+import AddButton from "../components/AddButton";
+import Search from "../components/Search";
 
 const teachers: Teacher[] = [
   {
@@ -91,41 +89,12 @@ export default function Teachers() {
           mb: 5,
         }}
       >
-        <Autocomplete
-          id="free-solo-demo"
-          freeSolo
-          clearIcon={false}
-          onInputChange={(_, newInputValue) => setSearchedValue(newInputValue)}
-          options={teachers.map((option) => option.name)}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search here"
-              slotProps={{
-                input: {
-                  ...params.InputProps,
-                  type: "search",
-                },
-              }}
-              variant="filled"
-              sx={{ minWidth: 300 }}
-            />
-          )}
+        <Search
+          data={teachers.map((teacher) => teacher.name)}
+          searchedValue={searchedValue}
+          setSearchedValue={setSearchedValue}
         />
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          sx={{
-            backgroundColor: "background.paper",
-            borderRadius: "20px",
-            height: 40,
-            width: 200,
-            color: "white",
-            textTransform: "none",
-          }}
-        >
-          New Teacher
-        </Button>
+        <AddButton title={"New Techer"} />
       </Box>
       <Box
         sx={{
