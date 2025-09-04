@@ -4,6 +4,7 @@ export interface Teacher {
   department: string;
   phone: string;
   email: string;
+
 }
 export interface Student {
   id: number;
@@ -14,8 +15,8 @@ export interface Student {
     city: string;
   };
   parentName: string;
-  phone: string;
-  email: string;
+  contact: { phone: string; email: string };
   parentPhone: string;
   parentEmail: string;
+  tuition: number;
 }

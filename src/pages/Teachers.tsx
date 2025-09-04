@@ -12,55 +12,16 @@ import type { Teacher } from "../models";
 import React from "react";
 import AddButton from "../components/AddButton";
 import Search from "../components/Search";
-
-const teachers: Teacher[] = [
-  {
-    id: 1,
-    name: "Dr. Sarah Johnson",
-    department: "Mathematics",
-    phone: "+20 100 123 4567",
-    email: "sarah.johnson@example.com",
-  },
-  {
-    id: 2,
-    name: "Mr. Ahmed Ali",
-    department: "Physics",
-    phone: "+20 101 234 5678",
-    email: "ahmed.ali@example.com",
-  },
-  {
-    id: 3,
-    name: "Ms. Emily Brown",
-    department: "Computer Science",
-    phone: "+20 102 345 6789",
-    email: "emily.brown@example.com",
-  },
-  {
-    id: 4,
-    name: "Dr. Omar Hassan",
-    department: "Biology",
-    phone: "+20 103 456 7890",
-    email: "omar.hassan@example.com",
-  },
-  {
-    id: 5,
-    name: "Prof. Layla Youssef",
-    department: "Chemistry",
-    phone: "+20 104 567 8901",
-    email: "layla.youssef@example.com",
-  },
-  {
-    id: 6,
-    name: "Dr. Omar Hassan",
-    department: "Biology",
-    phone: "+20 103 456 7890",
-    email: "omar.hassan@example.com",
-  },
-];
+import { useTeachers } from "../queriesAndMutations";
 
 export default function Teachers() {
+  const { data: teachers, isLoading, error } = useTeachers();
   const [searchedValue, setSearchedValue] = React.useState("");
-  const filteredTeachers = teachers.filter((teacher) =>
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching teachers</p>;
+
+  const filteredTeachers = teachers.filter((teacher: Teacher) =>
     teacher.name.toLowerCase().includes(searchedValue.toLowerCase())
   );
   return (
@@ -90,7 +51,7 @@ export default function Teachers() {
         }}
       >
         <Search
-          data={teachers.map((teacher) => teacher.name)}
+          data={teachers.map((teacher:Teacher) => teacher.name)}
           searchedValue={searchedValue}
           setSearchedValue={setSearchedValue}
         />
@@ -105,7 +66,7 @@ export default function Teachers() {
           mb: 3,
         }}
       >
-        {filteredTeachers.map((teacher) => (
+        {filteredTeachers.map((teacher:Teacher) => (
           <Card
             key={teacher.id}
             sx={{

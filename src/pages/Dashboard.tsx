@@ -1,10 +1,38 @@
 import { Box, Typography } from "@mui/material";
-import DashboardTable from "../components/DashboardTable";
+import { useStudents, useTeachers } from "../queriesAndMutations";
+import StudentsTable from "../components/StudentsTable";
+import type { Student } from "../models";
+import { unpaidStudentsColumns } from "../constants";
 
 export default function Dashboard() {
+  const {
+    data: students,
+    isLoading: studentsLoading,
+    error: studentsError,
+  } = useStudents();
+  const {
+    data: teachers,
+    isLoading: teachersLoading,
+    error: teachersError,
+  } = useTeachers();
+
+  const unpaidStudents =
+    students?.filter((student: Student) => student.tuition > 0) || [];
+
+  if (studentsLoading || teachersLoading) return <p>Loading...</p>;
+  if (studentsError || teachersError) return <p>Error fetching data</p>;
+
   const stats = [
-    { label: "Students", value: 752, icon: "icon-students.svg" },
-    { label: "Teachers", value: 30, icon: "icon-teachers.svg" },
+    {
+      label: "Students",
+      value: students?.length ?? 0,
+      icon: "icon-students.svg",
+    },
+    {
+      label: "Teachers",
+      value: teachers?.length ?? 0,
+      icon: "icon-teachers.svg",
+    },
     { label: "Events", value: 5, icon: "icon-events.svg" },
   ];
 
@@ -72,7 +100,10 @@ export default function Dashboard() {
       >
         Unpaid Student tuition
       </Typography>
-      <DashboardTable />
+      <StudentsTable
+        students={unpaidStudents}
+        columns={unpaidStudentsColumns}
+      />
     </Box>
   );
 }
