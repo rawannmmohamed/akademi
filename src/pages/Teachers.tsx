@@ -13,18 +13,17 @@ import React from "react";
 import AddButton from "../components/AddButton";
 import Search from "../components/Search";
 import { useTeachers } from "../queriesAndMutations";
+import LoadingErrorWrapper from "../components/LoadingErrorWrapper";
 
 export default function Teachers() {
-  const { data: teachers, isLoading, error } = useTeachers();
+  const { data: teachers, isLoading, error } = useTeachers([]);
   const [searchedValue, setSearchedValue] = React.useState("");
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching teachers</p>;
-
-  const filteredTeachers = teachers.filter((teacher: Teacher) =>
+  const filteredTeachers = teachers?.filter((teacher: Teacher) =>
     teacher.name.toLowerCase().includes(searchedValue.toLowerCase())
   );
   return (
+    <LoadingErrorWrapper isLoading={isLoading} error={error}>
     <Box sx={{ marginTop: 3, marginLeft: 4, marginRight: 4 }}>
       <Typography
         variant="h5"
@@ -51,7 +50,7 @@ export default function Teachers() {
         }}
       >
         <Search
-          data={teachers.map((teacher:Teacher) => teacher.name)}
+          data={teachers?.map((teacher:Teacher) => teacher.name)}
           searchedValue={searchedValue}
           setSearchedValue={setSearchedValue}
         />
@@ -66,7 +65,7 @@ export default function Teachers() {
           mb: 3,
         }}
       >
-        {filteredTeachers.map((teacher:Teacher) => (
+        {filteredTeachers?.map((teacher:Teacher) => (
           <Card
             key={teacher.id}
             sx={{
@@ -116,5 +115,6 @@ export default function Teachers() {
         ))}
       </Box>
     </Box>
+    </LoadingErrorWrapper>
   );
 }

@@ -1,16 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CssBaseline, Box, Typography } from "@mui/material";
+import {
+  ThemeProvider,
+  CssBaseline,
+  Box,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { ReactRouterAppProvider } from "@toolpad/core/react-router";
-
 import {
   DashboardLayout,
   DashboardSidebarPageItem,
 } from "@toolpad/core/DashboardLayout";
-
+import { Suspense, lazy } from "react";
 import theme from "./Theme";
-import Dashboard from "./pages/Dashboard";
-import Teachers from "./pages/Teachers";
-import Students from "./pages/Students";
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Teachers = lazy(() => import("./pages/Teachers"));
+const Students = lazy(() => import("./pages/Students"));
 
 const NAVIGATION = [
   {
@@ -21,12 +27,12 @@ const NAVIGATION = [
   {
     segment: "teachers",
     title: "Teachers",
-    icon: <img src="/Teacher.svg" alt="home icon" width={30} height={30} />,
+    icon: <img src="/Teacher.svg" alt="teacher icon" width={30} height={30} />,
   },
   {
     segment: "students",
     title: "Students",
-    icon: <img src="/Student.svg" alt="home icon" width={30} height={30} />,
+    icon: <img src="/Student.svg" alt="student icon" width={30} height={30} />,
   },
 ];
 
@@ -73,19 +79,34 @@ export default function App() {
               </Box>
             )}
           >
-            <Routes>
-              <Route path="" element={<Dashboard />} />
-              <Route path="teachers" element={<Teachers />} />
-              <Route path="students" element={<Students />} />
-              <Route
-                path="*"
-                element={
-                  <Box sx={{ p: 4 }}>
-                    <Typography variant="h5">404 - Page Not Found</Typography>
-                  </Box>
-                }
-              />
-            </Routes>
+            <Suspense
+              fallback={
+                <Box
+                  sx={{
+                    height: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <CircularProgress color="secondary" />
+                </Box>
+              }
+            >
+              <Routes>
+                <Route path="" element={<Dashboard />} />
+                <Route path="teachers" element={<Teachers />} />
+                <Route path="students" element={<Students />} />
+                <Route
+                  path="*"
+                  element={
+                    <Box sx={{ p: 4 }}>
+                      <Typography variant="h5">404 - Page Not Found</Typography>
+                    </Box>
+                  }
+                />
+              </Routes>
+            </Suspense>
           </DashboardLayout>
         </ReactRouterAppProvider>
       </BrowserRouter>
